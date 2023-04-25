@@ -27,13 +27,13 @@ function initChart(chart) {
   }
 
 async function getData() {
-    //const storedData = localStorage.getItem("storedData");
-    //let parsedData = JSON.parse(storedData);
-    //const results = await fetch('https://data.princegeorgescountymd.gov/resource/jh2p-ym6a.json');
-    //const storedList = await results.json();
-    //localStorage.setItem("storedData", JSON.stringify(storedList));
-    //parsedData = storedList;
-    //console.log(storedList);
+    const storedData = localStorage.getItem("storedData");
+    let parsedData = JSON.parse(storedData);
+    const results = await fetch('https://data.princegeorgescountymd.gov/resource/jh2p-ym6a.json');
+    const storedList = await results.json();
+    localStorage.setItem("storedData", JSON.stringify(storedList));
+    parsedData = storedList;
+    console.log(storedList);
     initChart(ctx);
 }
 
