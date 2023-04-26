@@ -1,13 +1,52 @@
-function initChart(chart) {
-    const ctx = document.querySelector('#myChart');
+/*function filterList(list) {
+    return list.filter((item) => {
+      const lowerCaseName = item.name.toLowerCase();
+      const lowerCaseQuery = query.toLowerCase();
+      return lowerCaseName.includes(lowerCaseQuery);
+    });
+
+   function groupAgencies(list) {
+    forEach((item) => {
+        const agencyGroup = 
+    })
+   }
+
+   function agencyFunding(list) {
+    forEach ((item)) => {
+        group the agencies based on item.agency;
+        save the agency group categories as new attributes
+        const totalFundingPerGency = find the total funding using item.amount for each agency;
+        return totalFundingPerAgency
+    }
+   }
+
+   function groupPaymentDescription(list) {
+    forEach ((item) => {
+        group the items based on the item.payment_description;
+        save the new categories as new attributes
+        const totalFundingPerNeed = find the total funding using item.amount for each payment_description group;
+    })
+   }
+
+   function averageFundingPerAgency(list) {
+    calculate the avaerage funding for the 5 agencies based on the totalFundingPerAgency;
+   }
+
+   function averageFundingPerNeed(list) {
+    calculate the average funding for the payment descriptions based on totalFundingPerNeed;
+   }
+*/
+
+function initChart() {
+    const ctx = document.getElementById('myChart');
   
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
         datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          label: 'Payment Amount',
+          data: [12, 19, 3, 5, 2],
           borderWidth: 1
         }]
       },
@@ -20,10 +59,32 @@ function initChart(chart) {
       }
     });
   
-    return new Chart(
-      chart,
-      config
-    )
+    return Chart
+  }
+
+  function initChart2() {
+    const ctx2 = document.getElementById('myChart2');
+  
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
+        datasets: [{
+          label: 'Payment Amount',
+          data: [12, 19, 3, 5, 2],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  
+    return Chart
   }
 
 async function getData() {
@@ -34,34 +95,15 @@ async function getData() {
     localStorage.setItem("storedData", JSON.stringify(storedList));
     parsedData = storedList;
     console.log(storedList);
-    initChart(ctx);
+    return storedList
+    //initChart();
 }
 
-/*
-function initChart(chart) {
-  const ctx = document.getElementById('myChart');
+async function mainEvent() {
+    console.log("Start");
+    getData();
+    initChart();
+    initChart2();
+}
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-  const myChart = new Chart(
-    chart,
-    config
-  )
-} */
+document.addEventListener("DOMContentLoaded", async () => mainEvent());
