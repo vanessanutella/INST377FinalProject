@@ -37,16 +37,19 @@
    }
 */
 
+
+let currentList;
+
 function initChart() {
     const ctx = document.getElementById('myChart');
   
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
+        labels: 
         datasets: [{
           label: 'Payment Amount',
-          data: [12, 19, 3, 5, 2],
+          data: 
           borderWidth: 1
         }]
       },
@@ -94,16 +97,61 @@ async function getData() {
     const storedList = await results.json();
     localStorage.setItem("storedData", JSON.stringify(storedList));
     parsedData = storedList;
-    console.log(storedList);
+    //console.log(storedList);
     return storedList
     //initChart();
 }
 
 async function mainEvent() {
     console.log("Start");
-    getData();
+    currentList = await getData();
+    const groupList = groupAgencies(currentList)
+    console.log(groupList)
+    const fundingPerGroup = totalFundingPerAgency(groupList)
     initChart();
     initChart2();
+    console.log(totalFundingPerAgency(groupList))
+}
+
+function groupAgencies(currentList) {
+  // hold list of groups or array of groups
+  let groupList = [] // [[{},{}], [{},{}], [{},{}]]
+  currentList.forEach(el => {
+    // check if groupList is empty and push the very first element into a new group [el]
+     if(groupList.length === 0) return  groupList.push([el])
+ 
+     // looping through groupList 
+     for (let j = 0; j < groupList.length; j++) {
+       const group = groupList[j];
+       // check if the first el's agency of a group is same as the current elements agency type and push into the group if it's same else just go to the next group and do same check
+       if(group[0].agency === el.agency) return group.push(el)
+     }
+ 
+     // we're goig to create a new group with el, if it's agency doesn't match with any group already in the list
+     return groupList.push([el])
+  })
+
+  return groupList // return group list to caller of function
+}
+
+function totalFundingPerAgency(groupList) {
+  let fundingPerGroup = []
+  groupList.forEach(agency => {
+    fundingPerGroup.push(
+      { 
+        name: agency[0].agency, 
+        totalFunding: sum(agency)
+      })
+  })
+  return fundingPerGroup
+}
+
+function sum(array) {
+  let result = 0
+  array.forEach(item => {
+    result += parseInt(item.amount)
+  })
+  return result
 }
 
 document.addEventListener("DOMContentLoaded", async () => mainEvent());
