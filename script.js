@@ -40,16 +40,22 @@
 
 let currentList;
 
+function addData(e) {
+  myBarChart.data.labels = "Ekologisk palmolja";
+  myBarChart.data.datasets.data = 14;
+  myBarChart.update();
+}
+
 function initChart() {
     const ctx = document.getElementById('myChart');
   
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: 
+        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
         datasets: [{
           label: 'Payment Amount',
-          data: 
+          data: [12, 19, 3, 5, 2],
           borderWidth: 1
         }]
       },
@@ -107,10 +113,13 @@ async function mainEvent() {
     currentList = await getData();
     const groupList = groupAgencies(currentList)
     console.log(groupList)
-    const fundingPerGroup = totalFundingPerAgency(groupList)
-    initChart();
-    initChart2();
+    const groupPayment = groupPaymentDescription(currentList)
+    console.log(groupPayment)
+    //const fundingPerGroup = totalFundingPerAgency(groupList)
+    //initChart();
+    //initChart2();
     console.log(totalFundingPerAgency(groupList))
+    console.log(totalFundingPerPayment(groupPayment))
 }
 
 function groupAgencies(currentList) {
@@ -134,6 +143,27 @@ function groupAgencies(currentList) {
   return groupList // return group list to caller of function
 }
 
+function groupPaymentDescription(currentList) {
+  // hold list of groups or array of groups
+  let groupPayment = [] // [[{},{}], [{},{}], [{},{}]]
+  currentList.forEach(el => {
+    // check if groupPayment is empty and push the very first element into a new group [el]
+     if(groupPayment.length === 0) return  groupPayment.push([el])
+ 
+     // looping through groupPayment 
+     for (let j = 0; j < groupPayment.length; j++) {
+       const groupP = groupPayment[j];
+       // check if the first el's payment_description of a group is same as the current elements payment_description type and push into the group if it's same else just go to the next group and do same check
+       if(groupP[0].payment_description === el.payment_description) return groupP.push(el)
+     }
+ 
+     // we're goig to create a new group with el, if it's agency doesn't match with any group already in the list
+     return groupPayment.push([el])
+  })
+
+  return groupPayment // return group payment to caller of function
+}
+
 function totalFundingPerAgency(groupList) {
   let fundingPerGroup = []
   groupList.forEach(agency => {
@@ -144,6 +174,18 @@ function totalFundingPerAgency(groupList) {
       })
   })
   return fundingPerGroup
+}
+
+function totalFundingPerPayment(groupPayment) {
+  let fundingPerPayment = []
+  groupPayment.forEach(payment_description => {
+    fundingPerPayment.push(
+      { 
+        name: payment_description[0].payment_description, 
+        totalFunding: sum(payment_description)
+      })
+  })
+  return fundingPerPayment
 }
 
 function sum(array) {
