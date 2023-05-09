@@ -117,7 +117,7 @@ async function mainEvent() {
     const groupPayment = groupPaymentDescription(currentList)
     console.log(groupPayment)
     //const fundingPerGroup = totalFundingPerAgency(groupList)
-    addData();
+    //addData();
     initChart();
     //initChart2();
     console.log(totalFundingPerAgency(groupList))
