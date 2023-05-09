@@ -1,6 +1,9 @@
 let currentList;
+let labels;
+let data;
 
 function removeData(chart) {
+  console.log(chart)
   chart.data.labels.pop();
   chart.data.datasets.forEach((dataset) => {
       dataset.data.pop();
@@ -11,7 +14,7 @@ function removeData(chart) {
 function addData(chart, payment) {
   labels = payment.map((item) => item.name);
   data = payment.map((item) => item.totalFunding);
-  chart.data.labels.push(label);
+  chart.data.labels.push(labels);
   chart.data.datasets.forEach((dataset) => {
       dataset.data.push(data);
   });
@@ -20,10 +23,10 @@ function addData(chart, payment) {
 
 function initChart(groupPayment) {
   const ctx = document.getElementById("myChart");
-  const labels = groupPayment.map((item) => item.name);
-  const data = groupPayment.map((item) => item.totalFunding);
+  labels = groupPayment.map((item) => item.name);
+  data = groupPayment.map((item) => item.totalFunding);
 
-  new Chart(ctx, {
+  const chart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
@@ -44,33 +47,10 @@ function initChart(groupPayment) {
     },
   });
 
-  return Chart;
+  return chart;
 }
 
-  function initChart2() {
-    const ctx2 = document.getElementById('myChart2');
-  
-    new Chart(ctx2, {
-      type: 'bar',
-      data: {
-        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
-        datasets: [{
-          label: 'Payment Amount',
-          data: [12, 19, 3, 5, 2],
-          borderWidth: 5
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  
-    return Chart
-  }
+
 
 async function getData() {
     const storedData = localStorage.getItem("storedData");
@@ -93,14 +73,30 @@ async function mainEvent() {
     console.log(groupPayment)
     //const fundingPerGroup = totalFundingPerAgency(groupList)
     //addData();
+    //const submitButton = document.querySelector("#submit_button");
     const agencyFunds = totalFundingPerAgency(groupList)
     const paymentFunds = totalFundingPerPayment(groupPayment)
     const chart = initChart(agencyFunds);
+    console.log(chart.data)
     //initChart2();
     console.log(totalFundingPerAgency(groupList))
     console.log(totalFundingPerPayment(groupPayment))
     //add eventListener
     //document.getElementById("myBtn").addEventListener("click", displayDate)
+    const dropdown = document.querySelector("#dropdown") 
+    dropdown.addEventListener("change", event => {
+      console.log(dropdown.value)
+      const selected = dropdown.value
+      removeData(chart)
+      if (selected === "Funding Per Agency") {
+        initChart(groupPayment)
+      }
+      else {
+        addData(chart, paymentFunds)
+      }
+      //removeData(chart)
+      //addData(chart)
+    })
 }
 
 function groupAgencies(currentList) {
