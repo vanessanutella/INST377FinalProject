@@ -40,9 +40,10 @@
 
 let currentList;
 
-function addData(e) {
-  myBarChart.data.labels = "Ekologisk palmolja";
-  myBarChart.data.datasets.data = 14;
+function addData() {
+  myBarChart.data.labels = totalFundingPerAgency(groupList.name);
+  console.log(myBarChart.data.labels)
+  myBarChart.data.datasets.data = totalFundingPerAgency(groupList.totalFunding);
   myBarChart.update();
 }
 
@@ -52,10 +53,10 @@ function initChart() {
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
+        labels: 1,
         datasets: [{
           label: 'Payment Amount',
-          data: [12, 19, 3, 5, 2],
+          data: 2,
           borderWidth: 1
         }]
       },
@@ -116,7 +117,8 @@ async function mainEvent() {
     const groupPayment = groupPaymentDescription(currentList)
     console.log(groupPayment)
     //const fundingPerGroup = totalFundingPerAgency(groupList)
-    //initChart();
+    addData();
+    initChart();
     //initChart2();
     console.log(totalFundingPerAgency(groupList))
     console.log(totalFundingPerPayment(groupPayment))
@@ -195,5 +197,9 @@ function sum(array) {
   })
   return result
 }
+
+/*const agencyFunds = totalFundingPerAgency(groupList)
+console.log(agencyFunds.name)
+const paymentFunds = totalFundingPerPayment(groupPayment)*/
 
 document.addEventListener("DOMContentLoaded", async () => mainEvent());
