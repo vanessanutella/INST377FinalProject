@@ -1,51 +1,11 @@
-/*function filterList(list) {
-    return list.filter((item) => {
-      const lowerCaseName = item.name.toLowerCase();
-      const lowerCaseQuery = query.toLowerCase();
-      return lowerCaseName.includes(lowerCaseQuery);
-    });
-
-   function groupAgencies(list) {
-    forEach((item) => {
-        const agencyGroup = 
-    })
-   }
-
-   function agencyFunding(list) {
-    forEach ((item)) => {
-        group the agencies based on item.agency;
-        save the agency group categories as new attributes
-        const totalFundingPerGency = find the total funding using item.amount for each agency;
-        return totalFundingPerAgency
-    }
-   }
-
-   function groupPaymentDescription(list) {
-    forEach ((item) => {
-        group the items based on the item.payment_description;
-        save the new categories as new attributes
-        const totalFundingPerNeed = find the total funding using item.amount for each payment_description group;
-    })
-   }
-
-   function averageFundingPerAgency(list) {
-    calculate the avaerage funding for the 5 agencies based on the totalFundingPerAgency;
-   }
-
-   function averageFundingPerNeed(list) {
-    calculate the average funding for the payment descriptions based on totalFundingPerNeed;
-   }
-*/
-
-
 let currentList;
 
-function addData() {
+/*function addData() {
   myBarChart.data.labels = totalFundingPerAgency(groupList.name);
   console.log(myBarChart.data.labels)
   myBarChart.data.datasets.data = totalFundingPerAgency(groupList.totalFunding);
   myBarChart.update();
-}
+}*/
 
 function initChart() {
     const ctx = document.getElementById('myChart');
@@ -53,10 +13,10 @@ function initChart() {
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: 1,
+        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
         datasets: [{
           label: 'Payment Amount',
-          data: 2,
+          data: [12, 19, 3, 5, 2],
           borderWidth: 1
         }]
       },
