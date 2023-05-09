@@ -1,36 +1,51 @@
 let currentList;
 
-/*function addData() {
-  myBarChart.data.labels = totalFundingPerAgency(groupList.name);
-  console.log(myBarChart.data.labels)
-  myBarChart.data.datasets.data = totalFundingPerAgency(groupList.totalFunding);
-  myBarChart.update();
-}*/
+function removeData(chart) {
+  chart.data.labels.pop();
+  chart.data.datasets.forEach((dataset) => {
+      dataset.data.pop();
+  });
+  chart.update();
+}
 
-function initChart() {
-    const ctx = document.getElementById('myChart');
-  
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Central Services', 'Public Works and Transportation', 'Police', 'Environment', 'Health'],
-        datasets: [{
-          label: 'Payment Amount',
-          data: [12, 19, 3, 5, 2],
-          borderWidth: 1
-        }]
+function addData(chart, payment) {
+  labels = payment.map((item) => item.name);
+  data = payment.map((item) => item.totalFunding);
+  chart.data.labels.push(label);
+  chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+  });
+  chart.update();
+}
+
+function initChart(groupPayment) {
+  const ctx = document.getElementById("myChart");
+  const labels = groupPayment.map((item) => item.name);
+  const data = groupPayment.map((item) => item.totalFunding);
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Payment Amount",
+          data: data,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
       },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  
-    return Chart
-  }
+    },
+  });
+
+  return Chart;
+}
 
   function initChart2() {
     const ctx2 = document.getElementById('myChart2');
@@ -42,7 +57,7 @@ function initChart() {
         datasets: [{
           label: 'Payment Amount',
           data: [12, 19, 3, 5, 2],
-          borderWidth: 1
+          borderWidth: 5
         }]
       },
       options: {
@@ -78,10 +93,14 @@ async function mainEvent() {
     console.log(groupPayment)
     //const fundingPerGroup = totalFundingPerAgency(groupList)
     //addData();
-    initChart();
+    const agencyFunds = totalFundingPerAgency(groupList)
+    const paymentFunds = totalFundingPerPayment(groupPayment)
+    const chart = initChart(agencyFunds);
     //initChart2();
     console.log(totalFundingPerAgency(groupList))
     console.log(totalFundingPerPayment(groupPayment))
+    //add eventListener
+    //document.getElementById("myBtn").addEventListener("click", displayDate)
 }
 
 function groupAgencies(currentList) {
@@ -158,8 +177,5 @@ function sum(array) {
   return result
 }
 
-/*const agencyFunds = totalFundingPerAgency(groupList)
-console.log(agencyFunds.name)
-const paymentFunds = totalFundingPerPayment(groupPayment)*/
 
 document.addEventListener("DOMContentLoaded", async () => mainEvent());
