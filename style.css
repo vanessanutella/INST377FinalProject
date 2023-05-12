@@ -22,7 +22,7 @@ body {
 }
 
 a {
-    display: flexbox;
+    display: flex;
     text-decoration: none;
 }
 
